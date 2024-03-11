@@ -80,6 +80,7 @@
     "react-dom": "^18.2.0",
     "react-lite-youtube-embed": "^2.4.0",
     "react-tweet": "^3.2.0",
+    "remark-slate": "^1.8.6",
     "slate": "0.102.0",
     "slate-history": "0.100.0",
     "slate-hyperscript": "0.100.0",

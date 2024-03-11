@@ -1,0 +1,79 @@
+# Headers
+
+- # Header 1
+- ## Header 2
+- ### Header 3
+- #### Header 4
+- ##### Header 5
+- ###### Header 6
+
+# Emphasis
+
+- **Bold:** **bold text** or **bold text**
+- _Italic:_ _italic text_ or _italic text_
+- **_Bold and italic:_** **_text_** or **_text_**
+
+# Lists
+
+## Ordered List
+
+1. First item
+2. Second item
+3. Third item
+
+## Unordered List
+
+- Bullet point
+- Another bullet point
+  - Nested bullet point
+
+# Links
+
+[Title](URL)
+
+# Images
+
+![Alt text](ImageURL)
+
+# Blockquotes
+
+> This is a blockquote.
+
+# Inline Code
+
+`Inline code`
+
+# Code Blocks
+
+`language `
+Code block
+
+# Horizontal Rule
+
+---
+
+# Tables
+
+| Header 1    | Header 2    |
+| ----------- | ----------- |
+| Row 1 Col 1 | Row 1 Col 2 |
+| Row 2 Col 1 | Row 2 Col 2 |
+
+# Strikethrough
+
+~~Strikethrough text~~
+
+# Task Lists
+
+- [x] Completed task
+- [ ] Incomplete task
+
+# Footnotes
+
+Here's a sentence with a footnote. [^1]
+
+[^1]: This is the footnote.
+
+# Escape Characters
+
+\*Literal asterisks\*

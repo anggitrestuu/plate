@@ -1,0 +1,62 @@
+[
+    {
+        "type": "ul",
+        "children": [
+            {
+                "type": "li",
+                "children": [
+                    {
+                        "type": "p",
+                        "indent": 1,
+                        "lineHeight": "150%",
+                        "align": "justify",
+                        "children": [
+                            {
+                                "text": "1. Setiap hari ada siswa yang sakit (sakit ringan)",
+                                "fontSize": "12pt"
+                            }
+                        ],
+                        "id": "jay1l"
+                    },
+                    {
+                        "type": "p",
+                        "indent": 1,
+                        "lineHeight": "150%",
+                        "align": "justify",
+                        "children": [
+                            {
+                                "text": "2. Tidak semua dirujuk di Puskesmas",
+                                "fontSize": "12pt"
+                            }
+                        ],
+                        "id": "5c93h"
+                    },
+                    {
+                        "type": "p",
+                        "indent": 1,
+                        "lineHeight": "150%",
+                        "align": "justify",
+                        "children": [
+                            {
+                                "text": "3. Bila yang sakit lebih dari satu, ruangan UKS tidak memenuhi syarat.",
+                                "fontSize": "12pt"
+                            }
+                        ],
+                        "id": "1smdp"
+                    }
+                ],
+                "id": "hoaiv"
+            }
+        ],
+        "id": "9zkj9"
+    },
+    {
+        "type": "p",
+        "children": [
+            {
+                "text": ""
+            }
+        ],
+        "id": "rn02r"
+    }
+]

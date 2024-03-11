@@ -3,10 +3,16 @@
 import React, { useRef } from 'react';
 import { cn } from '@udecode/cn';
 import { CommentsProvider } from '@udecode/plate-comments';
-import { Plate } from '@udecode/plate-common';
+import {
+  createPlateEditor,
+  Plate,
+  PlateStoreProvider,
+} from '@udecode/plate-common';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
+import { serializeHtml } from '@udecode/plate-serializer-html';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { serialize as serializeMarkdown } from 'remark-slate';
 
 import { commentsUsers, myUserId } from '@/lib/plate/comments';
 import { MENTIONABLES } from '@/lib/plate/mentionables';
@@ -20,8 +26,13 @@ import { FloatingToolbar } from '@/components/plate-ui/floating-toolbar';
 import { FloatingToolbarButtons } from '@/components/plate-ui/floating-toolbar-buttons';
 import { MentionCombobox } from '@/components/plate-ui/mention-combobox';
 
+import { serializePlateToMarkdown } from '../utils/serializer-md/serializer/serializePlateToMarkdown';
+
 export default function PlateEditor() {
   const containerRef = useRef(null);
+  const [editorValue, setEditorValue] = React.useState<any | null>(null);
+
+  const [mdValue, setMdValue] = React.useState<any | null>(null);
 
   const initialValue = [
     {
@@ -31,42 +42,140 @@ export default function PlateEditor() {
     },
   ];
 
+  const excludedSelectionPlugin = plugins?.filter(
+    (plugin) => plugin?.key !== 'blockSelection'
+  );
+
+  const editor = createPlateEditor({ plugins: excludedSelectionPlugin });
+
+  const handleChange = (value: any) => {
+    setEditorValue(value);
+
+    // try {
+    //   if (value) {
+    //     const html = serializeHtml(editor, {
+    //       nodes: value,
+    //       dndWrapper: (props) => (
+    //         <DndProvider backend={HTML5Backend} {...props} />
+    //       ),
+    //     });
+
+    //     console.log('html', html);
+    //   }
+    // } catch (error) {
+    //   console.log('error', error);
+    // }
+  };
+
+  // make handle copy editorValue to clipboard
+  const handleCopyEditorValue = () => {
+    navigator.clipboard.writeText(JSON.stringify(editorValue));
+  };
+
+  const handleCopyHtml = () => {
+    if (editorValue !== null) {
+      const html = serializeHtml(editor, {
+        nodes: editorValue,
+        dndWrapper: (props) => (
+          <DndProvider backend={HTML5Backend} {...props} />
+        ),
+      });
+
+      navigator.clipboard.writeText(html);
+    } else {
+      console.log('editorValue is null');
+    }
+  };
+
+  const handleCopyMarkdown = () => {
+    if (editorValue !== null) {
+      let mdText = '';
+
+      console.log('editorValue', editorValue);
+
+      try {
+        mdText = serializePlateToMarkdown({
+          nodes: editorValue,
+        });
+      } catch (error) {
+        console.log('error', error);
+      }
+
+      console.log('mdText', mdText);
+
+      navigator.clipboard.writeText(mdText);
+    } else {
+      console.log('editorValue is null');
+    }
+  };
+
   return (
-    <DndProvider backend={HTML5Backend}>
-      <CommentsProvider users={commentsUsers} myUserId={myUserId}>
-        <Plate plugins={plugins} initialValue={initialValue}>
-          <div
-            ref={containerRef}
-            className={cn(
-              'relative',
-              // Block selection
-              '[&_.slate-start-area-left]:!w-[64px] [&_.slate-start-area-right]:!w-[64px] [&_.slate-start-area-top]:!h-4'
-            )}
-          >
-            <FixedToolbar>
-              <FixedToolbarButtons />
-            </FixedToolbar>
+    <>
+      <DndProvider backend={HTML5Backend}>
+        <PlateStoreProvider>
+          <CommentsProvider users={commentsUsers} myUserId={myUserId}>
+            <Plate
+              value={editorValue}
+              plugins={plugins}
+              initialValue={initialValue}
+              onChange={handleChange}
+            >
+              <div
+                ref={containerRef}
+                className={cn(
+                  'relative',
+                  // Block selection
+                  '[&_.slate-start-area-left]:!w-[64px] [&_.slate-start-area-right]:!w-[64px] [&_.slate-start-area-top]:!h-4'
+                )}
+              >
+                <FixedToolbar>
+                  <FixedToolbarButtons />
+                </FixedToolbar>
 
-            <Editor
-              className="px-[96px] py-16"
-              autoFocus
-              focusRing={false}
-              variant="ghost"
-              size="md"
-            />
+                <Editor
+                  className="px-[96px] py-16"
+                  autoFocus
+                  focusRing={false}
+                  variant="ghost"
+                  size="md"
+                />
 
-            <FloatingToolbar>
-              <FloatingToolbarButtons />
-            </FloatingToolbar>
+                <FloatingToolbar>
+                  <FloatingToolbarButtons />
+                </FloatingToolbar>
 
-            <MentionCombobox items={MENTIONABLES} />
+                <MentionCombobox items={MENTIONABLES} />
 
-            <CommentsPopover />
+                <CommentsPopover />
 
-            <CursorOverlay containerRef={containerRef} />
-          </div>
-        </Plate>
-      </CommentsProvider>
-    </DndProvider>
+                <CursorOverlay containerRef={containerRef} />
+              </div>
+
+              {/* <Serialized /> */}
+            </Plate>
+          </CommentsProvider>
+        </PlateStoreProvider>
+      </DndProvider>
+
+      <button
+        className="mt-4 p-2 bg-blue-500 text-white"
+        onClick={handleCopyEditorValue}
+      >
+        Copy editorValue
+      </button>
+
+      <button
+        className="mt-4 p-2 bg-blue-500 text-white"
+        onClick={handleCopyHtml}
+      >
+        Copy HTML
+      </button>
+      <button
+        className="mt-4 p-2 bg-blue-500 text-white"
+        onClick={handleCopyMarkdown}
+      >
+        Copy Markdown
+      </button>
+    </>
   );
 }
